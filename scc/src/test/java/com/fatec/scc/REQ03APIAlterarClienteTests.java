@@ -27,7 +27,7 @@ class REQ03APIAlterarClienteTests {
 	@Autowired
 	MantemClienteI servico;
 	
-	@Test
+	//@Test
 	void ct01_quando_cliente_esta_cadastrado_retorna_cliente_alterado() {
 		Cliente clienteModificado = new Cliente("Jose da Silva", "10/02/1960", "M", "99504993052", "04280130", "2983");
 		clienteModificado.setDataCadastro("18/05/2020");
