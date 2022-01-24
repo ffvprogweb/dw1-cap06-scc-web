@@ -22,17 +22,15 @@ public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@CPF(message="CPF inválido.")
+	@Column(unique = true) // nao funciona com @Valid tem que tratar na camada de persistencia
+	private String cpf;
 	@NotBlank(message="Nome é requerido")
 	private String nome;
-	@Pattern(regexp="^(0?[1-9]|[12][0-9]|3[01])[\\/-](0?[1-9]|1[012])[\\/-]\\d{4}$", message="A data de vencimento deve estar no formato dd/MM/YYYY")
-	//https://www.regular-expressions.info/
 	private String dataNascimento;
 	private String dataCadastro;
 	private String sexo;
-	@CPF
-	@Column(unique = true) // nao funciona com @Valid tem que tratar na camada de persistencia
-	private String cpf;
-	@NotBlank(message="O CEP é obritatório.")
+	@NotBlank(message="O CEP é obrigatório.")
 	private String cep;
 	private String endereco;
 	@NotBlank(message="O complemento deve ser informado")
@@ -61,6 +59,7 @@ public class Cliente {
 	public String getNome() {
 		return nome;
 	}
+	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -84,18 +83,22 @@ public class Cliente {
 	public String getSexo() {
 		return sexo;
 	}
+	
 	public void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
 	public String getCpf() {
 		return cpf;
 	}
+	
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+	
 	public String getCep() {
 		return cep;
 	}
+	
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
@@ -108,6 +111,7 @@ public class Cliente {
 	public String getComplemento() {
 		return complemento;
 	}
+	
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
 	}

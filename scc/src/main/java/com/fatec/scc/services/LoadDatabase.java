@@ -21,13 +21,13 @@ public class LoadDatabase {
 		RestTemplate template = new RestTemplate();
 		
 		return args -> {
-			Cliente cliente1 = new Cliente("Jose", "10/02/1960", "M", "99504993052", "04280130", "2983");
+			Cliente cliente1 = new Cliente("Jose Antonio", "10/02/1960", "M", "99504993052", "04280130", "2983");
 			cliente1.setDataCadastro("18/05/2020");
 			ResponseEntity<Endereco> response = template.getForEntity("https://viacep.com.br/ws/{cep}/json/", Endereco.class, cliente1.getCep());
 			cliente1.setEndereco(response.getBody().getLogradouro());
 			log.info("Preloading " + repository.save(cliente1));
 			
-			Cliente cliente2 = new Cliente("Jose", "04/10/1974", "M", "43011831084", "08545160", "2983");
+			Cliente cliente2 = new Cliente("Marcos Silva", "04/10/1974", "M", "43011831084", "08545160", "2983");
 			cliente2.setDataCadastro("18/07/2019");
 			response = template.getForEntity("https://viacep.com.br/ws/{cep}/json/", Endereco.class, cliente2.getCep());
 			cliente2.setEndereco(response.getBody().getLogradouro());

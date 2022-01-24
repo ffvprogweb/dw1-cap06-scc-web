@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.fatec.scc.model.Cliente;
 
-public interface ClienteServico {
+public interface MantemCliente {
 	
 	List<Cliente> consultaTodos();
 	Cliente consultaPorCpf(String cpf);

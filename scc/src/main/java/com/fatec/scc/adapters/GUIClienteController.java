@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fatec.scc.model.Cliente;
-import com.fatec.scc.ports.ClienteServico;
+import com.fatec.scc.ports.MantemCliente;
 
 @Controller
 @RequestMapping(path = "/sig")
 public class GUIClienteController {
 	Logger logger = LogManager.getLogger(GUIClienteController.class);
 	@Autowired
-	ClienteServico servico;
+	MantemCliente servico;
 
 	@GetMapping("/clientes")
 	public ModelAndView retornaFormDeConsultaTodosClientes() {
@@ -31,12 +31,13 @@ public class GUIClienteController {
 
 	@GetMapping("/cliente")
 	public ModelAndView retornaFormDeCadastroDe(Cliente cliente) {
+		logger.info(">>>>>> controller form cadastro de cliente chamado ");
 		ModelAndView mv = new ModelAndView("cadastrarCliente");
 		mv.addObject("cliente", cliente);
 		return mv;
 	}
 
-	@GetMapping("/clientes/{cpf}") // diz ao metodo que ira responder a uma requisicao do tipo get
+	@GetMapping("/clientes/{cpf}") 
 	public ModelAndView retornaFormParaEditarCliente(@PathVariable("cpf") String cpf) {
 		ModelAndView modelAndView = new ModelAndView("atualizarCliente");
 		modelAndView.addObject("cliente", servico.consultaPorCpf(cpf)); // o repositorio e injetado no controller
@@ -54,11 +55,15 @@ public class GUIClienteController {
 
 	@PostMapping("/clientes")
 	public ModelAndView save(@Valid Cliente cliente, BindingResult result) {
+		logger.info(">>>>>> controller form cadastro de cliente chamou save");
 		ModelAndView modelAndView = new ModelAndView("consultarCliente");
 		if (result.hasErrors()) {
+			logger.info(">>>>>> controller form cadastro de cliente erro na interface =" + result.getFieldError());
 			modelAndView.setViewName("cadastrarCliente");
 		} else {
+			logger.info(">>>>>> controller form cadastro de cliente chamou save sem erro");
 			servico.save(cliente);
+			modelAndView.addObject("clientes", servico.consultaTodos());
 		}
 		return modelAndView;
 	}
@@ -69,16 +74,10 @@ public class GUIClienteController {
 		if (result.hasErrors()) {
 			cliente.setId(id);
 			return new ModelAndView("atualizarCliente");
+		} else {
+			servico.altera(cliente);
 		}
-		
-		Optional<Cliente> cliente1 = servico.consultaPorId(id);
-		Cliente umCliente = cliente1.get();
-		if (cliente1.isPresent()) {
-			umCliente.setCpf(cliente.getCpf());
-			umCliente.setNome(cliente.getNome());
-			umCliente.setCep(cliente.getCep());
-			servico.save(umCliente);
-		}
+			
 		return modelAndView;
 	}
 }

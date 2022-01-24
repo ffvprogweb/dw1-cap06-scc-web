@@ -15,10 +15,10 @@ import org.springframework.web.client.RestTemplate;
 import com.fatec.scc.model.Cliente;
 import com.fatec.scc.model.Endereco;
 import com.fatec.scc.ports.ClienteRepository;
-import com.fatec.scc.ports.ClienteServico;
+import com.fatec.scc.ports.MantemCliente;
 
 @Service
-public class ClienteServicoI implements ClienteServico {
+public class MantemClienteI implements MantemCliente {
 	Logger logger = LogManager.getLogger(this.getClass());
 	@Autowired
 	ClienteRepository repository;
@@ -59,12 +59,15 @@ public class ClienteServicoI implements ClienteServico {
 		repository.deleteById(id);
 	}
 	@Override
-	public Cliente altera(Cliente clienteModificado) {
+	public Cliente altera(Cliente cliente) {
 		logger.info(">>>>>> servico altera cliente chamado");
-		Optional<Cliente> cliente = consultaPorId(clienteModificado.getId());
-		Endereco endereco = obtemEndereco(clienteModificado.getCep());
-		if (cliente.isPresent() & endereco != null) {
-			clienteModificado.obtemDataAtual(new DateTime());
+		Optional<Cliente> umCliente = consultaPorId(cliente.getId());
+		Endereco endereco = obtemEndereco(cliente.getCep());
+		if (umCliente.isPresent() & endereco != null) {
+			Cliente clienteModificado = new Cliente(cliente.getNome(),cliente.getDataNascimento(),cliente.getSexo(),
+                    cliente.getCpf(), cliente.getCep(), cliente.getComplemento());
+			clienteModificado.setId(cliente.getId());
+			clienteModificado.setDataCadastro(cliente.getDataCadastro());
 			clienteModificado.setEndereco(endereco.getLogradouro());
 			logger.info(">>>>>> servico altera cliente cep valido para o id => " + clienteModificado.getId());
 			return repository.save(clienteModificado);
