@@ -15,6 +15,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 			.antMatchers("/sig/cliente").hasAnyRole("ADMIN", "BIB") //
 			.antMatchers("/sig/cliente/{id}").hasRole("ADMIN") // somente login jose pode excluir
+			.antMatchers("/api/v1/clientes/**").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.formLogin().loginPage("/login").permitAll().and().logout()
@@ -34,6 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/h2-console/**");
+		web.ignoring().antMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/h2-console/**","/api/v1/clientes/**" );
 	}
 }
